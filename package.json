@@ -1,0 +1,31 @@
+{
+  "name": "dify-cdk",
+  "version": "0.1.0",
+  "bin": {
+    "dify-cdk": "bin/dify-cdk.js"
+  },
+  "scripts": {
+    "init": "npx cdk bootstrap",
+    "synth": "npx cdk synth --all -q",
+    "deploy-test": "npx cdk deploy -c env=test --all --no-rollback --require-approval never",
+    "deploy-prod": "npx cdk deploy -c env=prod --all --no-rollback --require-approval never",
+    "deploy-all": "npx cdk deploy -c env=all --all --no-rollback --require-approval never",
+    "destroy": "npx cdk destroy --all"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.19",
+    "aws-cdk": "2.133.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.3.3"
+  },
+  "dependencies": {
+    "@aws-quickstart/eks-blueprints": "1.14.1",
+    "@types/lodash": "^4.14.197",
+    "@types/source-map-support": "^0.5.10",
+    "aws-cdk-lib": "2.133.0",
+    "cdk-redisdb": "^0.0.39",
+    "constructs": "^10.0.0",
+    "yaml": "^2.3.2",
+    "dotenv": "^16.0.0"
+  }
+}
