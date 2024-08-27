@@ -121,7 +121,11 @@ Deploy Dify Enterprise on AWS using CDK.
         }
     ```
 
-10. **CDK Destroy:**
+10. **Initialize Postgres Databases**
+
+    Before installing Helm charts, you need to create the necessary databases in your RDS instance. These database names should correspond to the values specified in the `externalPostgres` field of the Helm `values.yaml` file.
+
+11. **CDK Destroy:**
 
     Destroy the deployment for the environment specified in the `.env` file under `ENVIRONMENT`.
 
@@ -129,6 +133,6 @@ Deploy Dify Enterprise on AWS using CDK.
     npm run destroy
     ```
 
-11. **Advanced Configuration**
+12. **Advanced Configuration**
 
     To customize deployment configurations, modify the [test.ts](./configs/test.ts) file for the testing environment or the [prod.ts](./configs/prod.ts) file for the production environment.
