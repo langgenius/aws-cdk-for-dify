@@ -28,8 +28,6 @@ Deploy Dify Enterprise on AWS using CDK.
 
 ## Deployment
 
-### Prerequisites
-
 1. **Configure AWS CLI:**
 
    Install and configure the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
