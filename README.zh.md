@@ -1,14 +1,14 @@
 # Dify Enterprise on AWS
 
-[简体中文](./README.zh.md)
+[English](./README.md)
 
-Deploy Dify Enterprise on AWS using CDK.
+用CDK在AWS上部署 Dify Enterprise。
 
 ![1719058485616](images/README/1719058485616.png)
 
 ## Components
 
-### Testing Deployment Parameters
+### Testing Deployment 测试环境参数
 
 | **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
 | ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
@@ -18,7 +18,7 @@ Deploy Dify Enterprise on AWS using CDK.
 | K8S Worker Node     |                      | 1         | 4        | 16              | 100              |           |
 | EC2 (for Vector DB) | vectorDB             | 1         | 4        | 8               | 100              |           |
 
-### Production Deployment Parameters
+### Production Deployment 生产环境参数
 
 | **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
 | ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
@@ -28,87 +28,81 @@ Deploy Dify Enterprise on AWS using CDK.
 | K8S Worker Node     |                      | 6         | 8        | 32              | 100              |           |
 | EC2 (for Vector DB) | vectorDB             | 3         | 16       | 64              | 100              |           |
 
-## Deployment
+## Deploy
 
 ### Prerequisites
 
-1. **Install NodeJS Dependencies:**
+1. 环境依赖: NodeJS
 
    ```bash
    npm install
    ```
 
-2. **Configure AWS CLI:**
+2. AWS CLI 配置
 
-   Install and configure the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+   [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
    ```bash
    aws configure
    ```
 
-3. **Clone this repository:**
+3. 克隆此仓库
 
    ```bash
    git clone https://github.com/langgenius/aws-cdk-for-dify.git
    ```
 
-4. **Configure environment variables:**
+4. 配置环境变量
 
    ```bash
    cp env.example .env
    ```
 
-   Modify the environment variable values in the `.env` file.
+   修改文件里的环境变量值。
+   注意:
+   - 如果您使用的是AWS中国区，则需要配置`AWS_LOAD_BALANCER_REPO`才能正常使用。
+   - 推荐使用已有的VPC，方便访问资源。
 
-   **Note:**
-   - If you are using the AWS China region, you need to configure the `AWS_LOAD_BALANCER_REPO` for proper functionality.
-   - It is recommended to use an existing VPC for easier resource access.
-
-5. **CDK Bootstrap:**
-
-   Initialize the CDK environment:
+5. CDK bootstrap
 
    ```bash
    npm run init
    ```
 
-6. **CDK Deploy:**
-   - Deploy the Testing environment:
+6. CDK deploy
+   - 部署Testing环境
 
-     ```bash
-     npm run deploy-test
-     ```
+        ```bash
+        npm run deploy-test
+        ```
 
-   - Deploy the Production environment:
+   - 部署Production环境
 
-     ```bash
-     npm run deploy-prod
-     ```
+        ```bash
+        npm run deploy-prod
+        ```
 
-7. **Update AWS EKS Access Permissions:**
-   1. Navigate to the EKS Cluster panel, select the "Access" menu, and click on "Manage access":
+7. 修改AWS EKS访问权限
+   1. 在EKS Cluster面板中，选择 Access 菜单，点击 "Manage access"
         ![Dify-Testing-DifyStackTest-EKS](images/README/eks-access-panel.png)
-   2. In the "Manage access" dialog, select "EKS API and ConfigMap," then click "Save Changes."
-   3. In the IAM Access Entries panel, click "Create access entry":
+   2. 选择 "EKS API and ConfigMap" -> "Save Changes"
+   3. 在IAM access entries面板中，点击 "Create access entry"
         ![IAM access entries](images/README/eks-iam-access.png)
-   4. Add your IAM user and assign the following permissions:
-        - `AmazonEKSAdminPolicy`
-        - `AmazonEKSAdminViewPolicy`
-        - `AmazonEKSClusterAdminPolicy`
-
-8. **Configure kubeconfig to access the K8S cluster locally:**
+   4. 添加您的IAM用户，然后添加权限:
+         - `AmazonEKSAdminPolicy`
+         - `AmazonEKSAdminViewPolicy`
+         - `AmazonEKSClusterAdminPolicy`
+8. 配置kubeconfig以便在本地访问K8S集群
 
    ```bash
-   aws eks update-kubeconfig --region <cn-northwest-1> --name <Dify-Testing-DifyStackTest-EKS>
+   aws eks update-kubeconfig --region cn-northwest-1 --name Dify-Testing-DifyStackTest-EKS
    ```
 
-   Adjust the `region` and `name` according to your deployment:
-   - **region:** The deployment region.
-   - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` | `Dify-Production-DifyStackProd-EKS`).
+   请自行根据需求替换region和name
+   - region: 部署地区
+   - name: EKS集群名字 (`Dify-Testing-DifyStackTest-EKS` | `Dify-Production-DifyStackProd-EKS`)
 
-9. **CDK Destroy:**
-
-   To destroy the stack:
+9. CDK destroy
 
     ```bash
     npm run destroy
