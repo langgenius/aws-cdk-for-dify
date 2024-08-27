@@ -104,14 +104,31 @@ Deploy Dify Enterprise on AWS using CDK.
    - **region:** The AWS region where your cluster is deployed.
    - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` or `Dify-Production-DifyStackProd-EKS`).
 
-9. **CDK Destroy:**
+9. **AWS Load Balancer Configuration**
 
-   Destroy the deployment for the environment specified in the `.env` file under `ENVIRONMENT`.
+    It is recommended to use an AWS Application Load Balancer (ALB) for your ingress configuration in the Helm `values.yaml` file. To enable it, modify the `ingress` section as follows:
+
+    ```yaml
+    ingress:
+        enabled: true
+        className: "alb"
+        annotations: {
+            # Existing annotations
+            ...
+            # Add the following annotations
+            alb.ingress.kubernetes.io/target-type: "ip",
+            alb.ingress.kubernetes.io/scheme: "internet-facing",
+        }
+    ```
+
+10. **CDK Destroy:**
+
+    Destroy the deployment for the environment specified in the `.env` file under `ENVIRONMENT`.
 
     ```bash
     npm run destroy
     ```
 
-10. **Advanced Configuration**
+11. **Advanced Configuration**
 
     To customize deployment configurations, modify the [test.ts](./configs/test.ts) file for the testing environment or the [prod.ts](./configs/prod.ts) file for the production environment.
