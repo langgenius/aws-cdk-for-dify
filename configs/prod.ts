@@ -14,13 +14,6 @@ export const prodConfig: ProdStackConfig = {
   region: process.env.CDK_PROD_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_PROD_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
-  taints: {
-    vectorDb: {
-      key: 'vectordb',
-      value: 'true',
-    }
-  },
-
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
@@ -30,13 +23,6 @@ export const prodConfig: ProdStackConfig = {
         minSize: 1,
         maxSize: 6,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['8c32m']),
-        diskSize: 100,
-      },
-      db: {
-        desiredSize: 3,
-        minSize: 1,
-        maxSize: 3,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['16c64m']),
         diskSize: 100,
       }
     },

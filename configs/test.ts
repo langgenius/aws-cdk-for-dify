@@ -17,13 +17,6 @@ export const testConfig: TestStackConfig = {
   region: process.env.CDK_TESTING_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_TESTING_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
-  taints: {
-    vectorDb: {
-      key: 'vectordb',
-      value: 'true',
-    }
-  },
-
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
@@ -33,13 +26,6 @@ export const testConfig: TestStackConfig = {
         minSize: 1,
         maxSize: 1,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['4c16m']),
-        diskSize: 100,
-      },
-      db: {
-        desiredSize: 1,
-        minSize: 1,
-        maxSize: 1,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['4c8m']),
         diskSize: 100,
       }
     },

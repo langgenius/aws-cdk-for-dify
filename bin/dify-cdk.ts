@@ -13,10 +13,10 @@ import { ImportedVPCStack, VPCStack } from '../lib/vpc-stack';
 
 const app = new App();
 
-const environment = app.node.tryGetContext('env');
+const environment = process.env.ENVIRONMENT;
 
-if (!environment || !['test', 'prod', 'all'].includes(environment)) {
-  throw new Error("Please provide a valid environment name ('test', 'prod', or 'all')");
+if (!environment || !['test', 'prod'].includes(environment)) {
+  throw new Error("Please provide a valid environment name ('test' or 'prod')");
 }
 
 console.log(`Detected environment: ${environment}`);
@@ -51,7 +51,7 @@ const deployStack = (
   }).build();
 };
 
-if (['test', 'all'].includes(environment)) {
+if (environment === 'test') {
   const vpcTest = myVpc || new VPCStack(app, 'DifyVPCTest', {
     env: {
       account: config.testConfig.account,
@@ -63,7 +63,7 @@ if (['test', 'all'].includes(environment)) {
   deployStack('DifyStackTest', vpcTest, config.testConfig, 'Dify Testing Environment', DifyTestStackConstruct);
 }
 
-if (['prod', 'all'].includes(environment)) {
+if (environment === 'prod') {
   const vpcProd = myVpc || new VPCStack(app, 'DifyVPCProd', {
     env: {
       account: config.prodConfig.account,

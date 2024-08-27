@@ -38,8 +38,8 @@ export const REDIS_NODE_MAP = {
 /**
  * Aurora instance map
  * See https://aws.amazon.com/rds/aurora/pricing/ for more information
- * Note that some regions may not support all instance types, 
- * you can find avaliable instances in the AWS RDS creation page.
+ * Please note that not all instance types may be supported in every region, 
+ * You can find the available instance types on the AWS RDS creation page.
  * 
  * c - vCPUs, m - Memory in GB
  */

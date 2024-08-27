@@ -1,7 +1,5 @@
 # Dify Enterprise on AWS
 
-[简体中文](./README.zh.md)
-
 Deploy Dify Enterprise on AWS using CDK.
 
 ![1719058485616](images/README/1719058485616.png)
@@ -60,8 +58,15 @@ Deploy Dify Enterprise on AWS using CDK.
 
    Modify the environment variable values in the `.env` file.
 
+   - `ENVIRONMENT`: Specifies the deployment environment; must be either `test` or `prod`.
+   - `CDK_DEFAULT_REGION`: The AWS region where Dify Enterprise will be deployed.
+   - `CDK_DEFAULT_ACCOUNT`: Your AWS account ID.
+   - `DEPLOY_VPC_ID`: The ID of an existing VPC for deployment. If not set, CDK will create one for you.
+   - `AWS_EKS_CHART_REPO_URL`: (For AWS China regions ONLY) The AWS EKS Helm chart repository URL.
+   - `RDS_PUBLIC_ACCESSIBLE`: Set to `true` to make RDS publicly accessible (NOT RECOMMENDED).
+
    **Note:**
-   - If you are using the AWS China region, you need to configure the `AWS_EKS_CHART_REPO_URL` for proper functionality.
+   - If you are using AWS China regions, you must configure the `AWS_EKS_CHART_REPO_URL` for proper functionality. Please contact the Dify Team for the URL.
    - It is recommended to use an existing VPC for easier resource access.
 
 5. **CDK Bootstrap:**
@@ -73,19 +78,14 @@ Deploy Dify Enterprise on AWS using CDK.
    ```
 
 6. **CDK Deploy:**
-   - Deploy the Testing environment:
+   - Deploy Dify Enterprise:
 
      ```bash
-     npm run deploy-test
-     ```
-
-   - Deploy the Production environment:
-
-     ```bash
-     npm run deploy-prod
+     npm run deploy
      ```
 
 7. **Update AWS EKS Access Permissions:**
+
    1. Navigate to the EKS Cluster panel, select the "Access" menu, and click on "Manage access":
         ![Dify-Testing-DifyStackTest-EKS](images/README/eks-access-panel.png)
    2. In the "Manage access" dialog, select "EKS API and ConfigMap," then click "Save Changes."
@@ -108,8 +108,12 @@ Deploy Dify Enterprise on AWS using CDK.
 
 9. **CDK Destroy:**
 
-   To destroy the stack:
+   Destroy the deployment for the environment specified in the `.env` file under `ENVIRONMENT`.
 
     ```bash
     npm run destroy
     ```
+
+10. **Advanced Configuration**
+
+    To customize deployment configurations, modify the `[test.ts](configs/test.ts)` file for the testing environment or the `[prod.ts](configs/prod.ts)` file for the production environment.
