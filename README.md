@@ -51,7 +51,7 @@ Deploy Dify Enterprise on AWS using CDK.
 4. **Configure environment variables:**
 
    ```bash
-   cp env.example .env
+   cp .env.example .env
    ```
 
    Modify the environment variable values in the `.env` file.
