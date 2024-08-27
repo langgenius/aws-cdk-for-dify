@@ -11,21 +11,33 @@ import { PostgresSQLResourceProvider } from './resourceProvider/postgres';
 import { RedisResourceProvider } from './resourceProvider/redis';
 import { S3ResourceProvider } from './resourceProvider/s3';
 
-export interface DifyStackProps extends cdk.StackProps {
+export interface DifyStackProps {
   vpc: IVpc;
   config: StackConfig;
   extraValues?: object;
 }
 
-export class DifyStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: DifyStackProps) {
-    super(scope, id, props);
+export class DifyStackConstruct {
+  id: string;
+  scope: Construct;
+  difyProps: DifyStackProps;
+  props?: cdk.StackProps;
 
-    const config = props.config;
+  constructor(scope: Construct, id: string, difyProps: DifyStackProps, props: cdk.StackProps) {
+    this.scope = scope;
+    this.id = id;
+    this.difyProps = difyProps;
+    this.props = props;
+  }
+  build() {
+    const scope = this.scope;
+    const id = this.id;
+    const difyProps = this.difyProps;
+    const config = difyProps.config;
 
     const taint_db: TaintSpec = {
-      key: props.config.taints.vectorDb.key,
-      value: props.config.taints.vectorDb.value,
+      key: difyProps.config.taints.vectorDb.key,
+      value: difyProps.config.taints.vectorDb.value,
       effect: eks.TaintEffect.NO_SCHEDULE,
     }
 
@@ -88,12 +100,12 @@ export class DifyStack extends cdk.Stack {
     const blueprint = blueprints.EksBlueprint.builder()
       .version(config.cluster.version)
       .addOns(...addOns)
-      .resourceProvider(blueprints.GlobalResources.Vpc, new blueprints.DirectVpcProvider(props.vpc))
-      .resourceProvider("db", new PostgresSQLResourceProvider({ vpc: props.vpc, config: config }))
-      .resourceProvider("redis", new RedisResourceProvider({ vpc: props.vpc, config: config }))
+      .resourceProvider(blueprints.GlobalResources.Vpc, new blueprints.DirectVpcProvider(difyProps.vpc))
+      .resourceProvider("db", new PostgresSQLResourceProvider({ vpc: difyProps.vpc, config: config }))
+      .resourceProvider("redis", new RedisResourceProvider({ vpc: difyProps.vpc, config: config }))
       .resourceProvider("s3", new S3ResourceProvider({ config: config }).provide())
       .clusterProvider(clusterProvider)
-      .build(scope, `${getConstructPrefix(config)}-${id}-EKS`, props);
+      .build(scope, `${getConstructPrefix(config)}-${id}-EKS`, this.props);
 
     cdk.Tags.of(blueprint).add('marketplace', 'dify');
 
@@ -124,6 +136,5 @@ export class DifyStack extends cdk.Stack {
 
     const getTokenCommandCfnOutput = cluster.node.findChild('GetTokenCommand') as cdk.CfnOutput;
     getTokenCommandCfnOutput.overrideLogicalId('GetTokenCommand')
-
   }
 }

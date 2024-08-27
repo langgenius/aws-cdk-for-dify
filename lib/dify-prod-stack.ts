@@ -2,18 +2,20 @@ import { StackProps } from "aws-cdk-lib";
 import { IVpc } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 import { config } from "../configs";
-import { DifyStack } from "./dify-cdk-stack";
+import { DifyStackConstruct } from "./dify-cdk-stack";
 
-interface DifyProdStackProps extends StackProps {
+interface DifyProdStackProps {
   vpc: IVpc;
   extraValues?: object;
 }
 
-export class DifyProdStack extends DifyStack {
-  constructor(scope: Construct, id: string, props: DifyProdStackProps) {
+export class DifyProdStackConstruct extends DifyStackConstruct {
+  constructor(scope: Construct, id: string, difyProps: DifyProdStackProps, props: StackProps) {
     super(scope, id, {
-      ...props,
+      ...difyProps,
       config: config.prodConfig,
+    }, {
+      ...props,
     });
   }
 }
