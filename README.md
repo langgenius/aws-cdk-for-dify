@@ -8,7 +8,7 @@ Deploy Dify Enterprise on AWS using CDK.
 
 ## Components
 
-### Testing Deployment Parameters
+### Testing Deployment
 
 | **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
 | ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
@@ -18,7 +18,7 @@ Deploy Dify Enterprise on AWS using CDK.
 | K8S Worker Node     |                      | 1         | 4        | 16              | 100              |           |
 | EC2 (for Vector DB) | vectorDB             | 1         | 4        | 8               | 100              |           |
 
-### Production Deployment Parameters
+### Production Deployment
 
 | **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
 | ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
