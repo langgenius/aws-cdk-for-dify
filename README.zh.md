@@ -32,13 +32,7 @@
 
 ### Prerequisites
 
-1. 环境依赖: NodeJS
-
-   ```bash
-   npm install
-   ```
-
-2. AWS CLI 配置
+1. AWS CLI 配置
 
    [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
@@ -46,10 +40,16 @@
    aws configure
    ```
 
-3. 克隆此仓库
+2. 克隆此仓库
 
    ```bash
    git clone https://github.com/langgenius/aws-cdk-for-dify.git
+   ```
+
+3. 环境依赖: NodeJS
+
+   ```bash
+   npm install
    ```
 
 4. 配置环境变量

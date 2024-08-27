@@ -32,13 +32,7 @@ Deploy Dify Enterprise on AWS using CDK.
 
 ### Prerequisites
 
-1. **Install NodeJS Dependencies:**
-
-   ```bash
-   npm install
-   ```
-
-2. **Configure AWS CLI:**
+1. **Configure AWS CLI:**
 
    Install and configure the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
 
@@ -46,10 +40,16 @@ Deploy Dify Enterprise on AWS using CDK.
    aws configure
    ```
 
-3. **Clone this repository:**
+2. **Clone this repository:**
 
    ```bash
    git clone https://github.com/langgenius/aws-cdk-for-dify.git
+   ```
+
+3. **Install NodeJS Dependencies:**
+
+   ```bash
+   npm install
    ```
 
 4. **Configure environment variables:**
