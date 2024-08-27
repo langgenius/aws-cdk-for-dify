@@ -1,4 +1,5 @@
 import { EksClusterConfig, EksTaintsConfig } from './constructs/eksConfig';
+import { OpenSearchConfig } from './constructs/openSearchConfig';
 import { PostgresSQLConfig } from './constructs/postgresConfig';
 import { RedisConfig } from './constructs/redisConfig';
 import { S3Config } from './constructs/s3Config';
@@ -25,4 +26,7 @@ export interface StackConfig {
 
   // Redis config
   redis: RedisConfig;
+
+  // OpenSearch config
+  openSearch: OpenSearchConfig;
 }

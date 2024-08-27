@@ -21,6 +21,7 @@ export class PostgresSQLResourceProvider implements ResourceProvider<rds.Databas
   }
 
   provide(context: ResourceContext): rds.DatabaseInstance {
+    const publiclyAccessible = process.env.RDS_PUBLIC_ACCESSIBLE === 'true' || false;
     const dbCred = rds.Credentials.fromUsername(this.config.postgresSQL.dbCredentialUsername);
 
     const dbSecurityGroup = new ec2.SecurityGroup(context.scope, `${getConstructPrefix(this.config)}-PostgresRDSInstanceSG`, {
@@ -40,6 +41,14 @@ export class PostgresSQLResourceProvider implements ResourceProvider<rds.Databas
       "Allow access to the DB from the VPC"
     );
 
+    if (publiclyAccessible) {
+      dbSecurityGroup.addIngressRule(
+        ec2.Peer.anyIpv4(),
+        ec2.Port.tcp(5432),
+        "Allow access to the DB from the Internet"
+      );
+    }
+
     const postgresInstance = new rds.DatabaseInstance(context.scope, `${getConstructPrefix(this.config)}-PostgresRDSInstance`, {
       engine: rds.DatabaseInstanceEngine.postgres({
         version: this.config.postgresSQL.version,
@@ -53,7 +62,10 @@ export class PostgresSQLResourceProvider implements ResourceProvider<rds.Databas
       databaseName: this.config.postgresSQL.dbName,
       storageType: rds.StorageType.GP2,
       removalPolicy: this.config.postgresSQL.removeWhenDestroyed ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
-      publiclyAccessible: false,
+      publiclyAccessible: publiclyAccessible,
+      vpcSubnets: {
+        subnetType: publiclyAccessible ? ec2.SubnetType.PUBLIC : ec2.SubnetType.PRIVATE_WITH_EGRESS,
+      },
       backupRetention: cdk.Duration.days(this.config.postgresSQL.backupRetention),
     });
 

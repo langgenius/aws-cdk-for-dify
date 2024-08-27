@@ -18,3 +18,15 @@ export class VPCStack extends cdk.Stack {
     })
   }
 }
+
+export class ImportedVPCStack extends cdk.Stack {
+  public readonly vpc: ec2.IVpc
+
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    this.vpc = ec2.Vpc.fromLookup(this, id + "VPC", {
+      vpcId: process.env.DEPLOY_VPC_ID || '',
+    });
+  }
+}

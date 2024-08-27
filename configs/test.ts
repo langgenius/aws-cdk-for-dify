@@ -67,4 +67,14 @@ export const testConfig: TestStackConfig = {
     multiAZ: true
   },
 
+  openSearch: {
+    enabled: false,
+    version: undefined,
+    masterNodes: undefined,
+    masterNodeType: undefined,
+    dataNodes: undefined,
+    dataNodeType: undefined,
+    dataNodeSize: undefined
+  }
+
 }
