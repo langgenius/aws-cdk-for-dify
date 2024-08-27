@@ -35,7 +35,7 @@ export const prodConfig: ProdStackConfig = {
         desiredSize: 3,
         minSize: 1,
         maxSize: 3,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['8c64m']),
+        instanceType: new InstanceType(EC2_INSTANCE_MAP['16c64m']),
         diskSize: 100,
       }
     },
