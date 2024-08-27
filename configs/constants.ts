@@ -21,12 +21,6 @@ export const EC2_INSTANCE_MAP = {
   '8c16m': 'c7g.2xlarge',
   '16c32m': 'c7g.4xlarge',
   '32c64m': 'c7g.8xlarge',
-
-  '2c16m': 'r8g.large',
-  '4c32m': 'r8g.xlarge',
-  '8c64m': 'r8g.2xlarge',
-  '16c128m': 'r8g.4xlarge',
-  '32c256m': 'r8g.8xlarge',
 }
 
 /**
