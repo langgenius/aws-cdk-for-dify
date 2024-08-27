@@ -32,13 +32,7 @@
 
 ### Prerequisites
 
-1. 环境依赖: NodeJS
-
-   ```bash
-   npm install
-   ```
-
-2. AWS CLI 配置
+1. AWS CLI 配置
 
    [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
@@ -46,10 +40,16 @@
    aws configure
    ```
 
-3. 克隆此仓库
+2. 克隆此仓库
 
    ```bash
    git clone https://github.com/langgenius/aws-cdk-for-dify.git
+   ```
+
+3. 环境依赖: NodeJS
+
+   ```bash
+   npm install
    ```
 
 4. 配置环境变量
@@ -60,7 +60,7 @@
 
    修改文件里的环境变量值。
    注意:
-   - 如果您使用的是AWS中国区，则需要配置`AWS_LOAD_BALANCER_REPO`才能正常使用。
+   - 如果您使用的是AWS中国区，则需要配置`AWS_EKS_CHART_REPO_URL`才能正常使用。
    - 推荐使用已有的VPC，方便访问资源。
 
 5. CDK bootstrap
@@ -103,6 +103,7 @@
    - name: EKS集群名字 (`Dify-Testing-DifyStackTest-EKS` | `Dify-Production-DifyStackProd-EKS`)
 
 9. CDK destroy
+    若要删除CDK
 
     ```bash
     npm run destroy

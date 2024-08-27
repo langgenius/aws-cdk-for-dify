@@ -1,8 +1,11 @@
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as opensearch from 'aws-cdk-lib/aws-opensearchservice';
+import { getConstructPrefix } from '../../configs';
+import { StackConfig } from '../../configs/stackConfig';
 
 interface OpenSearchProps {
+  config: StackConfig,
   vpc: ec2.IVpc,
   version: opensearch.EngineVersion,
   masterNodes: number,
@@ -14,10 +17,14 @@ interface OpenSearchProps {
 
 
 export class OpensearchResourceProvider implements blueprints.ResourceProvider<opensearch.IDomain> {
-  constructor(readonly name: string, readonly props: OpenSearchProps) { }
+  private readonly config: StackConfig;
+
+  constructor(readonly props: OpenSearchProps) {
+    this.config = props.config;
+  }
 
   provide(context: blueprints.ResourceContext): opensearch.IDomain {
-    const domain = new opensearch.Domain(context.scope, this.name + "OpensearchDomain", {
+    const domain = new opensearch.Domain(context.scope, `${getConstructPrefix(this.config)}-OpensearchDomain`, {
       version: opensearch.EngineVersion.OPENSEARCH_2_11,
       capacity: {
         dataNodes: this.props.dataNodes,

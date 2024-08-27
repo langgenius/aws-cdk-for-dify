@@ -4,12 +4,12 @@
 import './loadenv';
 
 import { App } from 'aws-cdk-lib';
-import { IVpc, Vpc } from 'aws-cdk-lib/aws-ec2';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import 'source-map-support/register';
 import { config } from '../configs';
 import { DifyProdStackConstruct } from '../lib/dify-prod-stack';
 import { DifyTestStackConstruct } from '../lib/dify-test-stack';
-import { VPCStack } from '../lib/vpc-stack';
+import { ImportedVPCStack, VPCStack } from '../lib/vpc-stack';
 
 const app = new App();
 
@@ -26,7 +26,13 @@ let myVpc: IVpc | undefined;
 
 if (deployVpcId) {
   console.log(`Deploying to existing VPC with ID: ${deployVpcId}`);
-  myVpc = Vpc.fromLookup(app, 'ExistingVPC', { vpcId: deployVpcId });
+  myVpc = new ImportedVPCStack(app, `Existing-${deployVpcId}`, {
+    env: {
+      account: config.prodConfig.account,
+      region: config.prodConfig.region,
+    },
+    description: 'Dify VPC from existing VPC',
+  }).vpc;
 }
 
 const deployStack = (
