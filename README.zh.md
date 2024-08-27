@@ -103,6 +103,7 @@
    - name: EKS集群名字 (`Dify-Testing-DifyStackTest-EKS` | `Dify-Production-DifyStackProd-EKS`)
 
 9. CDK destroy
+    若要删除CDK
 
     ```bash
     npm run destroy
