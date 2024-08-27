@@ -1,5 +1,5 @@
 
-export const AWS_LOAD_BALANCER_REPO = process.env.AWS_LOAD_BALANCER_REPO || 'https://aws.github.io/eks-charts';
+export const AWS_EKS_CHART_REPO_URL = process.env.AWS_EKS_CHART_REPO_URL || 'https://aws.github.io/eks-charts';
 export const DESTROY_WHEN_REMOVE = process.env.GLOBAL_REMOVE_WHEN_DESTROYED === 'true' || false;
 export const PRODUCT_NAME = 'Dify';
 

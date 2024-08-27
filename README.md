@@ -61,7 +61,7 @@ Deploy Dify Enterprise on AWS using CDK.
    Modify the environment variable values in the `.env` file.
 
    **Note:**
-   - If you are using the AWS China region, you need to configure the `AWS_LOAD_BALANCER_REPO` for proper functionality.
+   - If you are using the AWS China region, you need to configure the `AWS_EKS_CHART_REPO_URL` for proper functionality.
    - It is recommended to use an existing VPC for easier resource access.
 
 5. **CDK Bootstrap:**

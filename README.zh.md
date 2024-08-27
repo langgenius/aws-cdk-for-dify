@@ -60,7 +60,7 @@
 
    修改文件里的环境变量值。
    注意:
-   - 如果您使用的是AWS中国区，则需要配置`AWS_LOAD_BALANCER_REPO`才能正常使用。
+   - 如果您使用的是AWS中国区，则需要配置`AWS_EKS_CHART_REPO_URL`才能正常使用。
    - 推荐使用已有的VPC，方便访问资源。
 
 5. CDK bootstrap

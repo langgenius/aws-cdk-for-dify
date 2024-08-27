@@ -5,7 +5,7 @@ import * as eks from 'aws-cdk-lib/aws-eks';
 import { TaintSpec } from 'aws-cdk-lib/aws-eks';
 import { Construct } from 'constructs';
 import { getConstructPrefix } from '../configs';
-import { AWS_LOAD_BALANCER_REPO } from '../configs/constants';
+import { AWS_EKS_CHART_REPO_URL } from '../configs/constants';
 import { StackConfig } from '../configs/stackConfig';
 import { OpensearchResourceProvider } from './resourceProvider/opensearch';
 import { PostgresSQLResourceProvider } from './resourceProvider/postgres';
@@ -83,7 +83,7 @@ export class DifyStackConstruct {
       new blueprints.addons.CoreDnsAddOn(),
       new blueprints.addons.KubeProxyAddOn(),
       new blueprints.addons.AwsLoadBalancerControllerAddOn({
-        repository: AWS_LOAD_BALANCER_REPO,
+        repository: AWS_EKS_CHART_REPO_URL,
         version: "1.8.1",
         enableShield: false,
         enableWaf: false,
