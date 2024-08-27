@@ -6,8 +6,8 @@ import './loadenv';
 import { App } from 'aws-cdk-lib';
 import 'source-map-support/register';
 import { config } from '../configs';
-import { DifyProdStack } from '../lib/dify-prod-stack';
-import { DifyTestStack } from '../lib/dify-test-stack';
+import { DifyProdStackConstruct } from '../lib/dify-prod-stack';
+import { DifyTestStackConstruct } from '../lib/dify-test-stack';
 import { VPCStack } from '../lib/vpc-stack';
 
 const app = new App();
@@ -30,14 +30,15 @@ if (environment === 'test' || environment === 'all') {
     description: 'Dify Testing VPC'
   });
 
-  new DifyTestStack(app, 'DifyStackTest', {
+  new DifyTestStackConstruct(app, 'DifyStackTest', {
     vpc: vpcTest.vpc,
+  }, {
     env: {
       account: config.testConfig.account,
       region: config.testConfig.region,
     },
     description: 'Dify Testing Environment'
-  });
+  }).build();
 }
 if (environment === 'prod' || environment === 'all') {
   // Deploy for production environment
@@ -49,14 +50,13 @@ if (environment === 'prod' || environment === 'all') {
     description: 'Dify Production VPC'
   });
 
-  new DifyProdStack(app, 'DifyStackProd', {
+  new DifyProdStackConstruct(app, 'DifyStackProd', {
     vpc: vpcProd.vpc,
+  }, {
     env: {
       account: config.prodConfig.account,
       region: config.prodConfig.region,
     },
     description: 'Dify Production Environment'
-  });
+  }).build();
 }
-
-app.synth();
