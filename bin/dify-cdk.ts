@@ -26,7 +26,7 @@ let myVpc: IVpc | undefined;
 
 if (deployVpcId) {
   console.log(`Deploying to existing VPC with ID: ${deployVpcId}`);
-  myVpc = new ImportedVPCStack(app, 'DifyVPC', {
+  myVpc = new ImportedVPCStack(app, `Existing-${deployVpcId}`, {
     env: {
       account: config.prodConfig.account,
       region: config.prodConfig.region,
