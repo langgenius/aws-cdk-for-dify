@@ -94,15 +94,15 @@ Deploy Dify Enterprise on AWS using CDK.
         - `AmazonEKSAdminViewPolicy`
         - `AmazonEKSClusterAdminPolicy`
 
-8. **Configure kubeconfig to access the K8S cluster locally:**
+8. **Configure `kubeconfig` to access the Kubernetes (K8S) cluster locally:**
 
    ```bash
    aws eks update-kubeconfig --region <cn-northwest-1> --name <Dify-Testing-DifyStackTest-EKS>
    ```
 
-   Adjust the `region` and `name` according to your deployment:
-   - **region:** The deployment region.
-   - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` | `Dify-Production-DifyStackProd-EKS`).
+   Adjust the `region` and `name` parameters according to your deployment:
+   - **region:** The AWS region where your cluster is deployed.
+   - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` or `Dify-Production-DifyStackProd-EKS`).
 
 9. **CDK Destroy:**
 
@@ -114,4 +114,4 @@ Deploy Dify Enterprise on AWS using CDK.
 
 10. **Advanced Configuration**
 
-    To customize deployment configurations, modify the `[test.ts](configs/test.ts)` file for the testing environment or the `[prod.ts](configs/prod.ts)` file for the production environment.
+    To customize deployment configurations, modify the [test.ts](./configs/test.ts) file for the testing environment or the [prod.ts](./configs/prod.ts) file for the production environment.
