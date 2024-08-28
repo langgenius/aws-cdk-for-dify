@@ -15,13 +15,6 @@ interface managedNodeGroups {
     maxSize: number, // maximum number of nodes
     instanceType: InstanceType, // instance type for the nodes
     diskSize: number, // disk size for the nodes
-  },
-  db: {
-    desiredSize: number, // desired number of nodes
-    minSize: number, // minimum number of nodes
-    maxSize: number, // maximum number of nodes
-    instanceType: InstanceType, // instance type for the nodes
-    diskSize: number, // disk size for the nodes
   }
 }
 

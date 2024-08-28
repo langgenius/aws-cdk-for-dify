@@ -1,8 +1,8 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
-import * as opensearch from 'aws-cdk-lib/aws-opensearchservice';
+import { EngineVersion } from "aws-cdk-lib/aws-opensearchservice";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 export interface ProdStackConfig extends StackConfig {
@@ -14,13 +14,6 @@ export const prodConfig: ProdStackConfig = {
   region: process.env.CDK_PROD_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_PROD_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
-  taints: {
-    vectorDb: {
-      key: 'vectordb',
-      value: 'true',
-    }
-  },
-
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
@@ -30,13 +23,6 @@ export const prodConfig: ProdStackConfig = {
         minSize: 1,
         maxSize: 6,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['8c32m']),
-        diskSize: 100,
-      },
-      db: {
-        desiredSize: 3,
-        minSize: 1,
-        maxSize: 3,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['16c64m']),
         diskSize: 100,
       }
     },
@@ -66,12 +52,12 @@ export const prodConfig: ProdStackConfig = {
 
   openSearch: {
     enabled: false,
-    version: opensearch.EngineVersion.ELASTICSEARCH_7_10,
-    dataNodes: 3,
+    version: EngineVersion.OPENSEARCH_2_11,
+    dataNodes: 6,
     dataNodeSize: 64,
-    dataNodeType: 'r6g.large.elasticsearch',
+    dataNodeType: OPENSEARCH_INSTANCE_MAP['16c64m'],
     masterNodes: 3,
-    masterNodeType: 'r6g.large.elasticsearch'
+    masterNodeType: OPENSEARCH_INSTANCE_MAP['8c16m'],
   }
 
 }

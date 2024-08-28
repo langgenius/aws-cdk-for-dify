@@ -1,7 +1,8 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
+import { EngineVersion } from "aws-cdk-lib/aws-opensearchservice";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 
@@ -17,13 +18,6 @@ export const testConfig: TestStackConfig = {
   region: process.env.CDK_TESTING_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_TESTING_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
-  taints: {
-    vectorDb: {
-      key: 'vectordb',
-      value: 'true',
-    }
-  },
-
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
@@ -33,13 +27,6 @@ export const testConfig: TestStackConfig = {
         minSize: 1,
         maxSize: 1,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['4c16m']),
-        diskSize: 100,
-      },
-      db: {
-        desiredSize: 1,
-        minSize: 1,
-        maxSize: 1,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['4c8m']),
         diskSize: 100,
       }
     },
@@ -68,13 +55,13 @@ export const testConfig: TestStackConfig = {
   },
 
   openSearch: {
-    enabled: false,
-    version: undefined,
-    masterNodes: undefined,
-    masterNodeType: undefined,
-    dataNodes: undefined,
-    dataNodeType: undefined,
-    dataNodeSize: undefined
+    enabled: true,
+    version: EngineVersion.OPENSEARCH_2_11,
+    masterNodes: 2,
+    masterNodeType: OPENSEARCH_INSTANCE_MAP['2c8m'],
+    dataNodes: 1,
+    dataNodeType: OPENSEARCH_INSTANCE_MAP['4c16m'],
+    dataNodeSize: 100
   }
 
 }

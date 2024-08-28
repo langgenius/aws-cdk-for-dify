@@ -2,7 +2,6 @@ import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as cdk from 'aws-cdk-lib';
 import { IVpc, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import * as eks from 'aws-cdk-lib/aws-eks';
-import { TaintSpec } from 'aws-cdk-lib/aws-eks';
 import { Construct } from 'constructs';
 import { getConstructPrefix } from '../configs';
 import { AWS_EKS_CHART_REPO_URL } from '../configs/constants';
@@ -36,12 +35,6 @@ export class DifyStackConstruct {
     const difyProps = this.difyProps;
     const config = difyProps.config;
 
-    const taint_db: TaintSpec = {
-      key: difyProps.config.taints.vectorDb.key,
-      value: difyProps.config.taints.vectorDb.value,
-      effect: eks.TaintEffect.NO_SCHEDULE,
-    }
-
     const clusterProvider = new blueprints.GenericClusterProvider({
       version: config.cluster.version,
       tags: config.cluster.tags,
@@ -60,20 +53,6 @@ export class DifyStackConstruct {
             "stack": cdk.Aws.STACK_NAME
           },
           diskSize: config.cluster.managedNodeGroups.app.diskSize,
-        },
-        { // worker node group for vector db
-          id: 'db',
-          desiredSize: config.cluster.managedNodeGroups.db.desiredSize,
-          instanceTypes: [config.cluster.managedNodeGroups.db.instanceType],
-          amiType: eks.NodegroupAmiType.AL2_ARM_64,
-          nodeGroupSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
-          enableSsmPermissions: true,
-          tags: {
-            "Name": cdk.Aws.STACK_NAME + "-DB",
-            "stack": cdk.Aws.STACK_NAME
-          },
-          taints: [taint_db],
-          diskSize: config.cluster.managedNodeGroups.db.diskSize,
         }
       ]
     })
@@ -84,7 +63,7 @@ export class DifyStackConstruct {
       new blueprints.addons.KubeProxyAddOn(),
       new blueprints.addons.AwsLoadBalancerControllerAddOn({
         repository: AWS_EKS_CHART_REPO_URL,
-        version: "1.8.1",
+        version: "1.8.2",
         enableShield: false,
         enableWaf: false,
         enableWafv2: false,
@@ -109,13 +88,7 @@ export class DifyStackConstruct {
     if (config.openSearch.enabled) {
       blueprintBuilder.resourceProvider("openSearch", new OpensearchResourceProvider({
         vpc: difyProps.vpc,
-        config: config,
-        version: config.openSearch.version!,
-        masterNodes: config.openSearch.masterNodes!,
-        masterNodeType: config.openSearch.masterNodeType!,
-        dataNodes: config.openSearch.dataNodes!,
-        dataNodeType: config.openSearch.dataNodeType!,
-        dataNodeSize: config.openSearch.dataNodeSize!
+        config: config
       }))
     }
 

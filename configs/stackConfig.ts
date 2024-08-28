@@ -1,4 +1,4 @@
-import { EksClusterConfig, EksTaintsConfig } from './constructs/eksConfig';
+import { EksClusterConfig } from './constructs/eksConfig';
 import { OpenSearchConfig } from './constructs/openSearchConfig';
 import { PostgresSQLConfig } from './constructs/postgresConfig';
 import { RedisConfig } from './constructs/redisConfig';
@@ -11,9 +11,6 @@ export interface StackConfig {
   environment: "Testing" | "Production";
   region: string;
   account: string;
-
-  // Taints for the EKS cluster
-  taints: EksTaintsConfig;
 
   // EKS cluster config
   cluster: EksClusterConfig;
