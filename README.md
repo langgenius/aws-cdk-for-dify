@@ -60,6 +60,12 @@ Deploy Dify Enterprise on AWS using CDK.
    - `CDK_DEFAULT_REGION`: The AWS region where Dify Enterprise will be deployed.
    - `CDK_DEFAULT_ACCOUNT`: Your AWS account ID.
    - `DEPLOY_VPC_ID`: The ID of an existing VPC for deployment. If not set, CDK will create one for you.
+   - Subnets Configuration (`DEPLOY_VPC_ID` required, comma-separated without spaces):
+     - `EKS_CLUSTER_SUBNETS`: Subnet IDs for the EKS control plane. Requires at least 2 subnets in different Availability Zones (AZs).
+     - `EKS_NODES_SUBNETS`: Subnet IDs for the EKS worker nodes. Requires at least 2 subnets in different AZs.
+     - `REDIS_SUBNETS`: Subnet IDs for Redis deployment.
+     - `RDS_SUBNETS`: subnet ids for RDS database. (At least 2 with different AZs)
+     - `OPENSEARCH_SUBNETS`: Subnet IDs for OpenSearch deployment.
    - `AWS_EKS_CHART_REPO_URL`: (For AWS China regions ONLY) The AWS EKS Helm chart repository URL.
    - `RDS_PUBLIC_ACCESSIBLE`: Set to `true` to make RDS publicly accessible (NOT RECOMMENDED).
 
