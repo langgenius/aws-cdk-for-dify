@@ -24,7 +24,7 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
   provide(context: blueprints.ResourceContext): opensearch.IDomain {
     const selectedSubnet = this.vpc.selectSubnets({
       subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
-    }).subnets;
+    }).subnets.slice(0, 2);
 
     const domain = new opensearch.Domain(context.scope, `${getConstructPrefix(this.config)}-OpensearchDomain`, {
       version: opensearch.EngineVersion.OPENSEARCH_2_13,
