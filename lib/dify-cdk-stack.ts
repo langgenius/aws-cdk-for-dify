@@ -1,5 +1,6 @@
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { IVpc, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import * as eks from 'aws-cdk-lib/aws-eks';
 import { Construct } from 'constructs';
@@ -22,12 +23,14 @@ export class DifyStackConstruct {
   scope: Construct;
   difyProps: DifyStackProps;
   props?: cdk.StackProps;
+  vpc: IVpc;
 
   constructor(scope: Construct, id: string, difyProps: DifyStackProps, props: cdk.StackProps) {
     this.scope = scope;
     this.id = id;
     this.difyProps = difyProps;
     this.props = props;
+    this.vpc = difyProps.vpc;
   }
   build() {
     const scope = this.scope;
@@ -35,9 +38,28 @@ export class DifyStackConstruct {
     const difyProps = this.difyProps;
     const config = difyProps.config;
 
+    const eksSubnets: ec2.SubnetSelection[] = config.cluster.vpcSubnetIds && config.cluster.vpcSubnetIds.length > 0
+      ? config.cluster.vpcSubnetIds.map(subnetId => ({
+        subnets: [ec2.Subnet.fromSubnetId(this.vpc, `${id}-VpcSubnet-${subnetId}`, subnetId)],
+      }))
+      : [
+        { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
+      ];
+
+    console.log(`EKS: using subnets: ${eksSubnets.map(subnet => subnet.subnets?.map(subnet => subnet.subnetId).join(', '))}`);
+
+    const appNodeSubnets: ec2.SubnetSelection = {
+      subnets: config.cluster.managedNodeGroups.app.workerNodeSubnetIds && config.cluster.managedNodeGroups.app.workerNodeSubnetIds.length > 0
+        ? config.cluster.managedNodeGroups.app.workerNodeSubnetIds.map(subnetId => ec2.Subnet.fromSubnetId(this.vpc, `${id}-WorkerNodeSubnet-${subnetId}`, subnetId))
+        : difyProps.vpc.selectSubnets({ subnetType: SubnetType.PRIVATE_WITH_EGRESS }).subnets
+    }
+
+    console.log(`Worker Nodes: using subnets: ${appNodeSubnets.subnets?.map(subnet => subnet.subnetId).join(', ')}`);
+
     const clusterProvider = new blueprints.GenericClusterProvider({
       version: config.cluster.version,
       tags: config.cluster.tags,
+      vpcSubnets: eksSubnets,
       managedNodeGroups: [
         { // worker node group for app
           id: 'app',
@@ -46,7 +68,7 @@ export class DifyStackConstruct {
           maxSize: config.cluster.managedNodeGroups.app.maxSize,
           instanceTypes: [config.cluster.managedNodeGroups.app.instanceType],
           amiType: eks.NodegroupAmiType.AL2_ARM_64,
-          nodeGroupSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
+          nodeGroupSubnets: appNodeSubnets,
           enableSsmPermissions: true,
           tags: {
             "Name": cdk.Aws.STACK_NAME + "-Workload",
