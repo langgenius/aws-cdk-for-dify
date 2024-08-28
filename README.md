@@ -2,7 +2,7 @@
 
 Deploy Dify Enterprise on AWS using CDK.
 
-![1719058485616](images/README/1719058485616.png)
+![1719058485616](images/README/infra.jpg)
 
 ## Components
 
@@ -64,7 +64,7 @@ Deploy Dify Enterprise on AWS using CDK.
    - `RDS_PUBLIC_ACCESSIBLE`: Set to `true` to make RDS publicly accessible (NOT RECOMMENDED).
 
    **Note:**
-   - If you are using AWS China regions, you must configure the `AWS_EKS_CHART_REPO_URL` for proper functionality. Please contact the Dify Team for the URL.
+   - If you are using AWS China regions, you must configure the `AWS_EKS_CHART_REPO_URL` for proper functionality. Please contact Dify Team for the URL.
    - It is recommended to use an existing VPC for easier resource access.
 
 5. **CDK Bootstrap:**

@@ -47,3 +47,18 @@ export const RDS_INSTANCE_MAP = {
   '2c8m': 'm5.large',
   '4c32m': 'r5.xlarge',
 }
+
+/**
+ * OpenSearch instance map
+ * See https://aws.amazon.com/opensearch-service/pricing/ for more information
+ * Please note that not all instance types may be supported in every region, 
+ * You can find the available instance types on the AWS OpenSearch creation page.
+ * 
+ * c - vCPUs, m - Memory in GB
+ */
+export const OPENSEARCH_INSTANCE_MAP = {
+  '16c64m': 'm7g.4xlarge.search',
+  '8c16m': 'c6g.2xlarge.search',
+  '2c8m': 'm6g.large.search',
+  '4c16m': 'm6g.xlarge.search',
+}

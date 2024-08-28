@@ -63,7 +63,7 @@ export class DifyStackConstruct {
       new blueprints.addons.KubeProxyAddOn(),
       new blueprints.addons.AwsLoadBalancerControllerAddOn({
         repository: AWS_EKS_CHART_REPO_URL,
-        version: "1.8.1",
+        version: "1.8.2",
         enableShield: false,
         enableWaf: false,
         enableWafv2: false,
@@ -88,13 +88,7 @@ export class DifyStackConstruct {
     if (config.openSearch.enabled) {
       blueprintBuilder.resourceProvider("openSearch", new OpensearchResourceProvider({
         vpc: difyProps.vpc,
-        config: config,
-        version: config.openSearch.version!,
-        masterNodes: config.openSearch.masterNodes!,
-        masterNodeType: config.openSearch.masterNodeType!,
-        dataNodes: config.openSearch.dataNodes!,
-        dataNodeType: config.openSearch.dataNodeType!,
-        dataNodeSize: config.openSearch.dataNodeSize!
+        config: config
       }))
     }
 

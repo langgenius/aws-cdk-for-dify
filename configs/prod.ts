@@ -1,8 +1,8 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
-import * as opensearch from 'aws-cdk-lib/aws-opensearchservice';
+import { EngineVersion } from "aws-cdk-lib/aws-opensearchservice";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 export interface ProdStackConfig extends StackConfig {
@@ -52,12 +52,12 @@ export const prodConfig: ProdStackConfig = {
 
   openSearch: {
     enabled: false,
-    version: opensearch.EngineVersion.ELASTICSEARCH_7_10,
-    dataNodes: 3,
+    version: EngineVersion.OPENSEARCH_2_11,
+    dataNodes: 6,
     dataNodeSize: 64,
-    dataNodeType: 'r6g.large.elasticsearch',
+    dataNodeType: OPENSEARCH_INSTANCE_MAP['16c64m'],
     masterNodes: 3,
-    masterNodeType: 'r6g.large.elasticsearch'
+    masterNodeType: OPENSEARCH_INSTANCE_MAP['8c16m'],
   }
 
 }
