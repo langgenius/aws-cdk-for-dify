@@ -1,8 +1,7 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
-import { EngineVersion } from "aws-cdk-lib/aws-opensearchservice";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 
@@ -56,11 +55,11 @@ export const testConfig: TestStackConfig = {
 
   openSearch: {
     enabled: true,
-    version: EngineVersion.OPENSEARCH_2_11,
-    masterNodes: 2,
-    masterNodeType: OPENSEARCH_INSTANCE_MAP['2c8m'],
-    dataNodes: 1,
-    dataNodeType: OPENSEARCH_INSTANCE_MAP['4c16m'],
+    capacity: {
+      dataNodes: 2,
+      dataNodeInstanceType: 'r6g.large.search',
+      multiAzWithStandbyEnabled: true,
+    },
     dataNodeSize: 100
   }
 

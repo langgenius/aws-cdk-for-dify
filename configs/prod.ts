@@ -1,8 +1,7 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
-import { EngineVersion } from "aws-cdk-lib/aws-opensearchservice";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 export interface ProdStackConfig extends StackConfig {
@@ -51,13 +50,13 @@ export const prodConfig: ProdStackConfig = {
   },
 
   openSearch: {
-    enabled: false,
-    version: EngineVersion.OPENSEARCH_2_11,
-    dataNodes: 6,
-    dataNodeSize: 64,
-    dataNodeType: OPENSEARCH_INSTANCE_MAP['16c64m'],
-    masterNodes: 3,
-    masterNodeType: OPENSEARCH_INSTANCE_MAP['8c16m'],
+    enabled: true,
+    capacity: {
+      dataNodes: 2,
+      dataNodeInstanceType: 'r6g.large.search',
+      multiAzWithStandbyEnabled: true,
+    },
+    dataNodeSize: 100
   }
 
 }

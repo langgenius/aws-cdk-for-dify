@@ -24,18 +24,16 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
   provide(context: blueprints.ResourceContext): opensearch.IDomain {
     const selectedSubnet = this.vpc.selectSubnets({
       subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
-    }).subnets[0];
+    }).subnets;
 
     const domain = new opensearch.Domain(context.scope, `${getConstructPrefix(this.config)}-OpensearchDomain`, {
-      version: opensearch.EngineVersion.OPENSEARCH_2_11,
-      vpcSubnets: [{ subnets: [selectedSubnet] }],
+      version: opensearch.EngineVersion.OPENSEARCH_2_13,
+      vpcSubnets: [{ subnets: selectedSubnet }],
       removalPolicy: DESTROY_WHEN_REMOVE ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
-      capacity: {
-        dataNodes: this.config.openSearch.dataNodes,
-        dataNodeInstanceType: this.config.openSearch.dataNodeType,
-        masterNodes: this.config.openSearch.masterNodes,
-        masterNodeInstanceType: this.config.openSearch.masterNodeType,
-        multiAzWithStandbyEnabled: false,
+      capacity: this.config.openSearch.capacity,
+      zoneAwareness: {
+        enabled: true,
+        availabilityZoneCount: 2,
       },
       ebs: {
         volumeSize: this.config.openSearch.dataNodeSize,
