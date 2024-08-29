@@ -33,7 +33,7 @@ export const prodConfig: ProdStackConfig = {
   },
 
   s3: {
-    removeWhenDestroyed: false,
+    removeWhenDestroyed: DESTROY_WHEN_REMOVE || false,
   },
 
   postgresSQL: {
