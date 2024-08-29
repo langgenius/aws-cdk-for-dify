@@ -15,6 +15,7 @@ interface managedNodeGroups {
     maxSize: number, // maximum number of nodes
     instanceType: InstanceType, // instance type for the nodes
     diskSize: number, // disk size for the nodes
+    workerNodeSubnetIds: string[]; // subnets for the EKS cluster worker nodes
   }
 }
 
@@ -22,4 +23,5 @@ export interface EksClusterConfig {
   version: KubernetesVersion; // version of the EKS cluster
   tags: { [key: string]: string }; // tags for the EKS cluster
   managedNodeGroups: managedNodeGroups; // managed node groups for the EKS cluster
+  vpcSubnetIds: string[]; // subnets for the EKS cluster control plane
 }

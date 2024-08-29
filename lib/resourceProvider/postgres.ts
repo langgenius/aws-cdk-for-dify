@@ -49,6 +49,48 @@ export class PostgresSQLResourceProvider implements ResourceProvider<rds.Databas
       );
     }
 
+    let vpcSubnets: ec2.SubnetSelection;
+    const multiAz = this.config.postgresSQL.multiAz;
+
+    if (multiAz.enabled) {
+      // Multi-AZ deployment: Use either user-defined subnets or private subnets across multiple AZs
+      if (this.config.postgresSQL.subnetIds && this.config.postgresSQL.subnetIds.length > 0) {
+        const selectedSubnets = this.config.postgresSQL.subnetIds.map(id =>
+          ec2.Subnet.fromSubnetId(this.vpc, `Subnet-${id}`, id)
+        );
+        vpcSubnets = { subnets: selectedSubnets };
+
+        console.log(`PostgresSQL: using subnets: ${selectedSubnets.map(subnet => subnet.subnetId).join(', ')}`);
+      } else if (multiAz.subnetGroupName) {
+        // Use a specific subnet group for multi-AZ
+        vpcSubnets = { subnetGroupName: multiAz.subnetGroupName };
+        console.log(`PostgresSQL: using subnet group: ${multiAz.subnetGroupName}`);
+      } else {
+        // Fallback to default behavior
+        vpcSubnets = {
+          subnetType: publiclyAccessible ? ec2.SubnetType.PUBLIC : ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        };
+
+        console.log(`PostgresSQL: using default subnets (${publiclyAccessible ? 'public' : 'private'})`);
+      }
+    } else {
+      // Single-AZ deployment: Use the first two available subnets or a user-provided subnets
+      if (this.config.postgresSQL.subnetIds && this.config.postgresSQL.subnetIds.length > 0) {
+        const subnets = this.config.postgresSQL.subnetIds.slice(0, 2);
+        vpcSubnets = {
+          subnets: subnets.map(id => ec2.Subnet.fromSubnetId(this.vpc, `Subnet-${id}`, id)),
+        };
+
+        console.log(`PostgresSQL: using subnets: ${subnets.join(', ')}`);
+      } else {
+        vpcSubnets = {
+          subnetType: publiclyAccessible ? ec2.SubnetType.PUBLIC : ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        };
+
+        console.log(`PostgresSQL: using default subnets (${publiclyAccessible ? 'public' : 'private'})`);
+      }
+    }
+
     const postgresInstance = new rds.DatabaseInstance(context.scope, `${getConstructPrefix(this.config)}-PostgresRDSInstance`, {
       engine: rds.DatabaseInstanceEngine.postgres({
         version: this.config.postgresSQL.version,
@@ -63,9 +105,8 @@ export class PostgresSQLResourceProvider implements ResourceProvider<rds.Databas
       storageType: rds.StorageType.GP2,
       removalPolicy: this.config.postgresSQL.removeWhenDestroyed ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
       publiclyAccessible: publiclyAccessible,
-      vpcSubnets: {
-        subnetType: publiclyAccessible ? ec2.SubnetType.PUBLIC : ec2.SubnetType.PRIVATE_WITH_EGRESS,
-      },
+      vpcSubnets: vpcSubnets,
+      multiAz: multiAz.enabled,
       backupRetention: cdk.Duration.days(this.config.postgresSQL.backupRetention),
     });
 

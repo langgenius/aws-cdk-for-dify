@@ -20,6 +20,7 @@ export const testConfig: TestStackConfig = {
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
+    vpcSubnetIds: [],
     managedNodeGroups: {
       app: {
         desiredSize: 1,
@@ -27,6 +28,7 @@ export const testConfig: TestStackConfig = {
         maxSize: 1,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['4c16m']),
         diskSize: 100,
+        workerNodeSubnetIds: []
       }
     },
   },
@@ -43,6 +45,11 @@ export const testConfig: TestStackConfig = {
     backupRetention: 0,
     storageSize: 256,
     removeWhenDestroyed: true,
+    subnetIds: [],
+    multiAz: {
+      enabled: false,
+      subnetGroupName: ''
+    }
   },
 
   redis: {
@@ -50,15 +57,23 @@ export const testConfig: TestStackConfig = {
     parameterGroup: "default.redis6.x",
     nodeType: REDIS_NODE_MAP['6.38m'],
     readReplicas: 1,
-    multiAZ: true
+    subnetIds: [],
+    multiAZ: {
+      enabled: false,
+      subnetGroupName: ''
+    }
   },
 
   openSearch: {
     enabled: true,
+    multiAz: {
+      enabled: false,
+      azCount: 2
+    },
+    subnetIds: [],
     capacity: {
       dataNodes: 2,
       dataNodeInstanceType: 'r6g.large.search',
-      multiAzWithStandbyEnabled: true,
     },
     dataNodeSize: 100
   }
