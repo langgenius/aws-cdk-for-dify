@@ -17,7 +17,6 @@ export const prodConfig: ProdStackConfig = {
     version: KubernetesVersion.V1_30,
     tags: { "marketplace": "dify" },
     // at least 2 ids
-    // [],
     vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.split(',') || [],
     managedNodeGroups: {
       app: {

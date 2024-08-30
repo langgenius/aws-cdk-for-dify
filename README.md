@@ -8,23 +8,23 @@ Deploy Dify Enterprise on AWS using CDK.
 
 ### Testing Deployment
 
-| **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
-| ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
-| S3                  | persistence          | 1         |          |                 |                  |           |
-| Redis DB            | externalRedis        | 1         | 2        | 6.38            |                  |           |
-| RDS Postgres DB     | externalPostgres     | 2         | 2        | 8               |                  |           |
-| K8S Worker Node     |                      | 1         | 4        | 16              | 100              |           |
-| EC2 (for Vector DB) | vectorDB             | 1         | 4        | 8               | 100              |           |
+| **Component**   | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
+| --------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
+| S3              | persistence          | 1         |          |                 |                  |           |
+| Redis DB        | externalRedis        | 1         | 2        | 6.38            |                  |           |
+| RDS Postgres DB | externalPostgres     | 2         | 2        | 8               |                  |           |
+| K8S Worker Node |                      | 1         | 4        | 16              | 100              |           |
+| OpenSearch      | vectorDB             | 1         | 2        | 16              | 100              |           |
 
 ### Production Deployment
 
-| **Component**       | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
-| ------------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
-| S3                  | persistence          | 1         |          |                 |                  |           |
-| Redis DB            | externalRedis        | 1         | 2        | 12.93           |                  |           |
-| RDS Postgres DB     | externalPostgres     | 1         | 4        | 32              |                  |           |
-| K8S Worker Node     |                      | 6         | 8        | 32              | 100              |           |
-| EC2 (for Vector DB) | vectorDB             | 3         | 16       | 64              | 100              |           |
+| **Component**   | **Helm Chart Value** | **Count** | **vCPU** | **Memory (GB)** | **Storage (GB)** | **Notes** |
+| --------------- | -------------------- | --------- | -------- | --------------- | ---------------- | --------- |
+| S3              | persistence          | 1         |          |                 |                  |           |
+| Redis DB        | externalRedis        | 1         | 2        | 12.93           |                  |           |
+| RDS Postgres DB | externalPostgres     | 1         | 4        | 32              |                  |           |
+| K8S Worker Node |                      | 6         | 8        | 32              | 100              |           |
+| OpenSearch      | vectorDB             | 2         | 8        | 64              | 100              |           |
 
 ## Deployment
 

@@ -41,13 +41,30 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
     } else {
       // If multi-AZ is not enabled, use the first available subnet or a user-provided subnet
       selectedSubnets = subnetIds && subnetIds.length > 0
-        ? [ec2.Subnet.fromSubnetId(this.vpc, `Subnet-${subnetIds[0]}`, subnetIds[0])]
+        ? [ec2.Subnet.fromSubnetId(this.vpc, `Subnet-${subnetIds[0]}-OpenSearch`, subnetIds[0])]
         : this.vpc.selectSubnets({
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
         }).subnets.slice(0, 1);
 
       console.log(`OpenSearch: using subnet: ${selectedSubnets[0].subnetId}`);
     }
+
+    // Security group for the OpenSearch domain
+    const domainSecurityGroup = new ec2.SecurityGroup(context.scope, `${getConstructPrefix(this.config)}-OpenSearchSG`, {
+      vpc: this.vpc,
+      description: 'SecurityGroup associated with OpenSearch Domain ' + getConstructPrefix(this.config),
+      allowAllOutbound: true,
+    });
+    domainSecurityGroup.addIngressRule(
+      ec2.Peer.ipv4(this.vpc.vpcCidrBlock),
+      ec2.Port.tcp(443),
+      "Allow HTTPS access to OpenSearch from the VPC"
+    );
+    domainSecurityGroup.addIngressRule(
+      ec2.Peer.ipv4(this.vpc.vpcCidrBlock),
+      ec2.Port.tcp(9200),
+      "Allow OpenSearch traffic"
+    )
 
     const domainProps: opensearch.DomainProps = {
       version: opensearch.EngineVersion.OPENSEARCH_2_13,
@@ -57,6 +74,7 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
         ...capacity,
         multiAzWithStandbyEnabled: multiAz.enabled,
       },
+      securityGroups: [domainSecurityGroup],
       ebs: {
         volumeSize: dataNodeSize,
         volumeType: ec2.EbsDeviceVolumeType.GP3,

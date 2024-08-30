@@ -3,6 +3,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { IVpc, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import * as eks from 'aws-cdk-lib/aws-eks';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { getConstructPrefix } from '../configs';
 import { AWS_EKS_CHART_REPO_URL } from '../configs/constants';
@@ -75,6 +76,20 @@ export class DifyStackConstruct {
             "stack": cdk.Aws.STACK_NAME
           },
           diskSize: config.cluster.managedNodeGroups.app.diskSize,
+          nodeRole: blueprints.getResource(context => {
+            const role = new iam.Role(context.scope, 'NodeRole', {
+              assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+              roleName: `${getConstructPrefix(config)}-EKS-NodeRole`,
+              managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"),
+                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKSWorkerNodePolicy"),
+                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKS_CNI_Policy"),
+                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryReadOnly"),
+                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"),
+              ]
+            });
+            return role;
+          })
         }
       ]
     })

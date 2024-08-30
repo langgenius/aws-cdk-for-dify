@@ -1,7 +1,7 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { DESTROY_WHEN_REMOVE, EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 
@@ -20,7 +20,8 @@ export const testConfig: TestStackConfig = {
   cluster: {
     version: KubernetesVersion.V1_29,
     tags: { "marketplace": "dify" },
-    vpcSubnetIds: [],
+    // at least 2 ids
+    vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.split(',') || [],
     managedNodeGroups: {
       app: {
         desiredSize: 1,
@@ -28,13 +29,14 @@ export const testConfig: TestStackConfig = {
         maxSize: 1,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['4c16m']),
         diskSize: 100,
-        workerNodeSubnetIds: []
+        // at least 2 ids
+        workerNodeSubnetIds: process.env.EKS_NODES_SUBNETS?.split(',') || []
       }
     },
   },
 
   s3: {
-    removeWhenDestroyed: false,
+    removeWhenDestroyed: DESTROY_WHEN_REMOVE || false,
   },
 
   postgresSQL: {
@@ -45,7 +47,8 @@ export const testConfig: TestStackConfig = {
     backupRetention: 0,
     storageSize: 256,
     removeWhenDestroyed: true,
-    subnetIds: [],
+    // at least 2 ids
+    subnetIds: process.env.RDS_SUBNETS?.split(',') || [],
     multiAz: {
       enabled: false,
       subnetGroupName: ''
@@ -57,7 +60,7 @@ export const testConfig: TestStackConfig = {
     parameterGroup: "default.redis6.x",
     nodeType: REDIS_NODE_MAP['6.38m'],
     readReplicas: 1,
-    subnetIds: [],
+    subnetIds: process.env.REDIS_SUBNETS?.split(',') || [],
     multiAZ: {
       enabled: false,
       subnetGroupName: ''
@@ -70,7 +73,7 @@ export const testConfig: TestStackConfig = {
       enabled: false,
       azCount: 2
     },
-    subnetIds: [],
+    subnetIds: process.env.OPENSEARCH_SUBNETS?.split(',') || [],
     capacity: {
       dataNodes: 2,
       dataNodeInstanceType: 'r6g.large.search',
