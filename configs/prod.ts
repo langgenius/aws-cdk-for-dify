@@ -17,7 +17,7 @@ export const prodConfig: ProdStackConfig = {
     version: KubernetesVersion.V1_30,
     tags: { "marketplace": "dify" },
     // at least 2 ids
-    vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.split(',') || [],
+    vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     managedNodeGroups: {
       app: {
         desiredSize: 3,
@@ -26,7 +26,7 @@ export const prodConfig: ProdStackConfig = {
         instanceType: new InstanceType(EC2_INSTANCE_MAP['8c32m']),
         diskSize: 100,
         // at least 2 ids
-        workerNodeSubnetIds: process.env.EKS_NODES_SUBNETS?.split(',') || []
+        workerNodeSubnetIds: process.env.EKS_NODES_SUBNETS?.trim().split(',').filter(id => id.length > 0) || []
       }
     },
   },
@@ -44,7 +44,7 @@ export const prodConfig: ProdStackConfig = {
     storageSize: 512,
     removeWhenDestroyed: DESTROY_WHEN_REMOVE,
     // at least 2 ids
-    subnetIds: process.env.RDS_SUBNETS?.split(',') || [],
+    subnetIds: process.env.RDS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     multiAz: {
       enabled: false,
       subnetGroupName: ''
@@ -56,7 +56,7 @@ export const prodConfig: ProdStackConfig = {
     parameterGroup: "default.redis6.x",
     nodeType: REDIS_NODE_MAP['12.93m'],
     readReplicas: 1,
-    subnetIds: process.env.REDIS_SUBNETS?.split(',') || [],
+    subnetIds: process.env.REDIS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     multiAZ: {
       enabled: false,
       subnetGroupName: ''
@@ -69,7 +69,7 @@ export const prodConfig: ProdStackConfig = {
       enabled: false,
       azCount: 2
     },
-    subnetIds: process.env.OPENSEARCH_SUBNETS?.split(',') || [],
+    subnetIds: process.env.OPENSEARCH_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     capacity: {
       dataNodes: 2,
       dataNodeInstanceType: 'r6g.large.search',
