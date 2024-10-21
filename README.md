@@ -210,12 +210,10 @@ Deploy Dify Enterprise on AWS using CDK.
 13. ### Set docker image pull secret
 
     You need to set the docker image pull secret before installing Dify Enterprise.
-
-    - [How to set docker image pull secret](../configuration/docker/docker-image-pull-secret.md)
-
+    
     **Note:** If you haven't got the username and password, please contact us, email address:[Support@dify.ai](support@dify.ai)
 
-14. ### TLS
+15. ### TLS
 
     #### For testing:
 
@@ -253,7 +251,7 @@ Deploy Dify Enterprise on AWS using CDK.
       useTLS: true
     ```
 
-15. ### AWS Load Balancer Configuration
+16. ### AWS Load Balancer Configuration
 
     It is recommended to use an AWS Application Load Balancer (ALB) for your ingress configuration in the Helm `values.yaml` file. To enable it, modify the `ingress` section as follows:
 
@@ -288,7 +286,7 @@ Deploy Dify Enterprise on AWS using CDK.
       }
     ```
 
-16. ### Install Dify Enterprise
+17. ### Install Dify Enterprise
 
     Dify Enterprise is deployed using Helm. 
 
@@ -299,7 +297,7 @@ Deploy Dify Enterprise on AWS using CDK.
     helm upgrade -i dify -f values.yaml dify/dify
     ```
 
-17. ### Access Dify Enterprise
+18. ### Access Dify Enterprise
 
     #### For testing:
 
@@ -333,7 +331,7 @@ Deploy Dify Enterprise on AWS using CDK.
 
     
 
-18. ### Verify Installation
+19. ### Verify Installation
 
     **Warning**: You have to set up Dify Console `http://console.dify.local` first before login to Dify Enterprise Dashboard `http://enterprise.dify.local`.
 
