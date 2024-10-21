@@ -3,6 +3,10 @@ export const AWS_EKS_CHART_REPO_URL = process.env.AWS_EKS_CHART_REPO_URL || 'htt
 export const DESTROY_WHEN_REMOVE = process.env.GLOBAL_REMOVE_WHEN_DESTROYED === 'true' || false;
 export const PRODUCT_NAME = 'Dify';
 
+// Generate a 6-character random string consisting of numbers and letters
+export const AWS_RESOURCE_SUFFIX = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+
 /**
  * Instance map for the EC2 instances
  * See https://aws.amazon.com/ec2/instance-types for more information
