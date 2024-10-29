@@ -86,8 +86,10 @@ Deploy Dify Enterprise on AWS using CDK.
      - `REDIS_SUBNETS`: Subnet IDs for Redis deployment.
      - `RDS_SUBNETS`: subnet ids for RDS database. (At least 2 with different AZs)
      - `OPENSEARCH_SUBNETS`: Subnet IDs for OpenSearch deployment.
+
      - `OPENSEARCH_ADMINNAME`: OpenSearch Domain master ame.
      - `OPENSEARCH_PASSWORD`: OpenSearch Domain master password.
+
 
    - `AWS_EKS_CHART_REPO_URL`: (For AWS China regions ONLY) The AWS EKS Helm chart repository URL.
 
@@ -135,7 +137,7 @@ Deploy Dify Enterprise on AWS using CDK.
    Adjust the `region` and `name` parameters according to your deployment:
 
    - **region:** The AWS region where your cluster is deployed.
-   - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` or `Dify-Production-DifyStackProd-EKS`).
+   - **name:** The EKS cluster name .
 
 9. ### Data Persistence Configure:
 
@@ -198,6 +200,7 @@ Deploy Dify Enterprise on AWS using CDK.
     Change the Helm `values.yaml` file,  modify the `externalType` section as follows:
      1. replace `{openSearch_endpont}` with aws Opensearch instant's **Domain endpoint**, remove `https://` and use the left.
      2. replace the `<OPENSEARCH_ADMINNAME>` and `<OPENSEARCH_PASSWORD>` with the value you have set in `.env`
+
 
     ```yaml
     vectorDB:

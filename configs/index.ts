@@ -14,5 +14,6 @@ export const config: DifyCDKConfig = {
 }
 
 export const getConstructPrefix = (config: StackConfig) => {
+
   return `${PRODUCT_NAME}-${config.environment}-${AWS_RESOURCE_SUFFIX}`;
 } 
