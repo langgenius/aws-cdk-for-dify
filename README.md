@@ -201,10 +201,10 @@ Deploy Dify Enterprise on AWS using CDK.
       externalType: "opensearch"
       externalOpenSearch:
         host: "{openSearch_endpont}"
-        port: 9200
-        user: ""
-        password: ""
-        useTLS: false
+        port: 443
+        user: "<your_aos_username>"
+        password: "<your_aos_password>"
+        useTLS: true
     ```
 
 13. ### Set docker image pull secret
