@@ -1,6 +1,7 @@
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as opensearch from 'aws-cdk-lib/aws-opensearchservice';
 import { getConstructPrefix } from '../../configs';
 import { DESTROY_WHEN_REMOVE } from '../../configs/constants';
@@ -14,10 +15,12 @@ interface OpenSearchProps {
 export class OpensearchResourceProvider implements blueprints.ResourceProvider<opensearch.IDomain> {
   private readonly config: StackConfig;
   private readonly vpc: ec2.IVpc;
+  private readonly domainName: string;
 
   constructor(readonly props: OpenSearchProps) {
     this.vpc = props.vpc;
     this.config = props.config;
+    this.domainName = `${getConstructPrefix(props.config)}-Domain`.toLowerCase();
   }
 
   provide(context: blueprints.ResourceContext): opensearch.IDomain {
@@ -66,9 +69,18 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
       "Allow OpenSearch traffic"
     )
 
+    const masterUserName = process.env.OPENSEARCH_ADMINNAME;
+    if (!masterUserName) {
+      throw new Error("environment variable 'OPENSEARCH_ADMINNAME' is missing");
+    }
+    const masterUserPassword = process.env.OPENSEARCH_PASSWORD;
+    if (!masterUserPassword) {
+      throw new Error("environment variable 'OPENSEARCH_PASSWORD' is missing");
+    }
     const domainProps: opensearch.DomainProps = {
       version: opensearch.EngineVersion.OPENSEARCH_2_13,
       removalPolicy: DESTROY_WHEN_REMOVE ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      domainName: this.domainName,
       vpcSubnets: [{ subnets: selectedSubnets }],
       capacity: {
         ...capacity,
@@ -85,6 +97,24 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
         enabled: multiAz.enabled,
         availabilityZoneCount: multiAz.azCount,
       },
+
+      nodeToNodeEncryption: true,
+      enforceHttps: true,
+      encryptionAtRest: {
+        enabled: true,
+      },
+      fineGrainedAccessControl: {
+        masterUserName: masterUserName,
+        masterUserPassword: cdk.SecretValue.unsafePlainText(masterUserPassword),
+      },
+      accessPolicies: [
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          principals: [new iam.AnyPrincipal()], 
+          actions: ['es:*'],  
+          resources: [`arn:aws:es:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:domain/${this.domainName}/*`],
+        }),
+      ],
       vpc: this.vpc,
     };
 

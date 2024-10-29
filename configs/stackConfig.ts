@@ -8,7 +8,7 @@ import { S3Config } from './constructs/s3Config';
  * Basic configuration for a stack
  */
 export interface StackConfig {
-  environment: "Testing" | "Production";
+  environment: "Test" | "Prod";
   region: string;
   account: string;
 

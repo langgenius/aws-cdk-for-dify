@@ -9,7 +9,7 @@ export interface ProdStackConfig extends StackConfig {
 }
 
 export const prodConfig: ProdStackConfig = {
-  environment: 'Production',
+  environment: 'Prod',
   region: process.env.CDK_PROD_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_PROD_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
