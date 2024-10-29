@@ -133,7 +133,7 @@ Deploy Dify Enterprise on AWS using CDK.
    Adjust the `region` and `name` parameters according to your deployment:
 
    - **region:** The AWS region where your cluster is deployed.
-   - **name:** The EKS cluster name (`Dify-Testing-DifyStackTest-EKS` or `Dify-Production-DifyStackProd-EKS`).
+   - **name:** The EKS cluster name .
 
 9. ### Data Persistence Configure:
 
