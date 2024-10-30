@@ -14,8 +14,5 @@ export const config: DifyCDKConfig = {
 }
 
 export const getConstructPrefix = (config: StackConfig) => {
-  // Generate a 6-character random string consisting of numbers and letters
-  const randomSuffix = Math.random().toString(36).slice(2, 8).toUpperCase();
-
   return `${PRODUCT_NAME}-${config.environment}-${AWS_RESOURCE_SUFFIX}`;
 } 

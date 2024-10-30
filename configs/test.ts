@@ -13,7 +13,7 @@ export interface TestStackConfig extends StackConfig {
 }
 
 export const testConfig: TestStackConfig = {
-  environment: 'Testing',
+  environment: 'Test',
   region: process.env.CDK_TESTING_REGION || process.env.CDK_DEFAULT_REGION || '',
   account: process.env.CDK_TESTING_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 

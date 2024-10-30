@@ -86,6 +86,8 @@ Deploy Dify Enterprise on AWS using CDK.
      - `REDIS_SUBNETS`: Subnet IDs for Redis deployment.
      - `RDS_SUBNETS`: subnet ids for RDS database. (At least 2 with different AZs)
      - `OPENSEARCH_SUBNETS`: Subnet IDs for OpenSearch deployment.
+     - `OPENSEARCH_ADMINNAME`: OpenSearch Domain master ame.
+     - `OPENSEARCH_PASSWORD`: OpenSearch Domain master password.
 
    - `AWS_EKS_CHART_REPO_URL`: (For AWS China regions ONLY) The AWS EKS Helm chart repository URL.
 
@@ -193,7 +195,9 @@ Deploy Dify Enterprise on AWS using CDK.
 
 12. ### VectorDatabase Configure:
 
-    Change the Helm `values.yaml` file,  modify the `externalType` section as follows, replace `{openSearch_endpont}` with aws Opensearch instant's **Domain endpoint**, remove `https://` and use the left:
+    Change the Helm `values.yaml` file,  modify the `externalType` section as follows:
+     1. replace `{openSearch_endpont}` with aws Opensearch instant's **Domain endpoint**, remove `https://` and use the left.
+     2. replace the `<OPENSEARCH_ADMINNAME>` and `<OPENSEARCH_PASSWORD>` with the value you have set in `.env`
 
     ```yaml
     vectorDB:
@@ -202,8 +206,8 @@ Deploy Dify Enterprise on AWS using CDK.
       externalOpenSearch:
         host: "{openSearch_endpont}"
         port: 443
-        user: "<your_aos_username>"
-        password: "<your_aos_password>"
+        user: "<OPENSEARCH_ADMINNAME>"
+        password: "<OPENSEARCH_PASSWORD>"
         useTLS: true
     ```
 
