@@ -135,9 +135,77 @@ Deploy Dify Enterprise on AWS using CDK.
    Adjust the `region` and `name` parameters according to your deployment:
 
    - **region:** The AWS region where your cluster is deployed.
-   - **name:** The EKS cluster name .
+   - **name:** The EKS cluster name.
 
-9. ### Data Persistence Configure:
+9. ### Configure Permissions via IRSA
+
+   1. **Enable the IAM OIDC provider for your EKS cluster**
+
+      Follow the [official AWS documentation](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html) to associate your EKS cluster with an OIDC identity provider. This step is required before you can use IAM Roles for Service Accounts (IRSA).
+
+   2. **Create a JSON policy document** (for example, iam-policy.json) defining the S3 permissions your pods need:
+
+    ```json
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:ListBucket"
+                ],
+                "Resource": "arn:aws:s3:::YOUR_BUCKET"
+            },
+            {
+                "Sid": "List",
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:GetObjectVersion"
+                ],
+                "Resource": "arn:aws:s3:::YOUR_BUCKET/*"
+            }
+          ]
+      }
+    ```
+
+   3. **Create an IAM policy** using the document you just created:
+
+      ```bash
+      aws iam create-policy \
+        --policy-name YOUR-IAM-POLICY \
+        --policy-document file://iam-policy.json
+      ```
+
+   4. **Create an IAM role and annotate your service account**.
+
+      You can do this via the AWS console (see how to [create an IAM role](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) and [annotate a service account](https://docs.aws.amazon.com/eks/latest/userguide/configure-sts-endpoint.html)), or by running:
+
+      ```bash
+      eksctl create iamserviceaccount \
+        --name YOUR-SERVICEACCOUNT \
+        --namespace YOUR-NAMESPACE \
+        --cluster YOUR-CLUSTER \
+        --attach-policy-arn arn:aws:iam::xxxxxxxxxx:policy/YOUR-IAM-POLICY \
+        --approve
+      ```
+
+      This command does two things:
+
+      - Creates (or updates) the IAM role to trust the EKS OIDC provider.
+      - Annotates the specified Kubernetes service account with the role’s ARN.
+
+   5. Reference your service account in the Helm `values.yaml`:
+
+      ```yaml
+      api:
+        serviceAccountName: YOUR-SERVICEACCOUNT
+
+      ```
+
+      Once deployed, the pod will assume the IAM role and have the specified S3 access (or other permissions) through IRSA.
+
+10. ### Data Persistence Configure:
 
    Change the Helm `values.yaml` file. To enable it, modify the `persistence` section as follows, replace {your-region-name} and {your-s3-bucket-name} with the name of resource created by CDK, make sure you have turn `useAwsManagedIam` on:
 
@@ -151,7 +219,7 @@ Deploy Dify Enterprise on AWS using CDK.
        useAwsManagedIam: true
    ```
 
-10. ### Database Configure:
+11. ### Database Configure:
 
     Change the Helm `values.yaml` file, **remove** `postgre` section, and modify the `externalPostgres` section as follows, replace {your-postgres-endpoint} and {your-postgres-password} with data stored in the **Secret Manager** of AWS:
 
@@ -175,7 +243,7 @@ Deploy Dify Enterprise on AWS using CDK.
           sslmode: "disable"
     ```
 
-11. ### Redis Configure:
+12. ### Redis Configure:
 
     Change the Helm `values.yaml` file, **remove** `redis` section, and modify the `externalRedis` section as follows, replace {your-redis-host} with `Primary endpoint` in console of  **ElastiCache-Redis OSS caches**
 
@@ -193,7 +261,7 @@ Deploy Dify Enterprise on AWS using CDK.
       useSSL: false
     ```
 
-12. ### VectorDatabase Configure:
+13. ### VectorDatabase Configure:
 
     Change the Helm `values.yaml` file,  modify the `externalType` section as follows:
      1. replace `{openSearch_endpont}` with aws Opensearch instant's **Domain endpoint**, remove `https://` and use the left.
@@ -211,7 +279,7 @@ Deploy Dify Enterprise on AWS using CDK.
         useTLS: true
     ```
 
-13. ### Set docker image pull secret
+14. ### Set docker image pull secret
 
     You need to set the docker image pull secret before installing Dify Enterprise.
     
