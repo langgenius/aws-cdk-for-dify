@@ -1,6 +1,6 @@
 {
   "name": "dify-cdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin": {
     "dify-cdk": "bin/dify-cdk.js"
   },
@@ -12,15 +12,15 @@
   },
   "devDependencies": {
     "@types/node": "20.11.19",
-    "aws-cdk": "2.148.1",
+    "aws-cdk": "2.173.4",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   },
   "dependencies": {
-    "@aws-quickstart/eks-blueprints": "1.15.1",
+    "@aws-quickstart/eks-blueprints": "1.16.3",
     "@types/lodash": "^4.14.197",
     "@types/source-map-support": "^0.5.10",
-    "aws-cdk-lib": "2.148.1",
+    "aws-cdk-lib": "2.173.4",
     "cdk-redisdb": "^0.0.39",
     "constructs": "^10.0.0",
     "dotenv": "^16.0.0",
