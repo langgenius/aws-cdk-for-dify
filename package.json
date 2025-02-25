@@ -20,7 +20,7 @@
     "@aws-quickstart/eks-blueprints": "1.16.3",
     "@types/lodash": "^4.14.197",
     "@types/source-map-support": "^0.5.10",
-    "aws-cdk-lib": "2.173.4",
+    "aws-cdk-lib": "2.177.0",
     "cdk-redisdb": "^0.0.39",
     "constructs": "^10.0.0",
     "dotenv": "^16.0.0",
