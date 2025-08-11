@@ -78,7 +78,7 @@ export class OpensearchResourceProvider implements blueprints.ResourceProvider<o
       throw new Error("environment variable 'OPENSEARCH_PASSWORD' is missing");
     }
     const domainProps: opensearch.DomainProps = {
-      version: opensearch.EngineVersion.OPENSEARCH_2_13,
+      version: opensearch.EngineVersion.OPENSEARCH_2_19,
       removalPolicy: DESTROY_WHEN_REMOVE ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
       domainName: this.domainName,
       vpcSubnets: [{ subnets: selectedSubnets }],

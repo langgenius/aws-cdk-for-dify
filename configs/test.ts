@@ -26,7 +26,7 @@ export const testConfig: TestStackConfig = {
       app: {
         desiredSize: 1,
         minSize: 1, 
-        maxSize: 1,
+        maxSize: 2,
         instanceType: new InstanceType(EC2_INSTANCE_MAP['test']),
         diskSize: 40,
         // at least 2 ids
@@ -59,7 +59,7 @@ export const testConfig: TestStackConfig = {
     engineVersion: "6.2",
     parameterGroup: "default.redis6.x",
     nodeType: REDIS_NODE_MAP['test'],
-    readReplicas: 0,
+    readReplicas: 1,
     subnetIds: process.env.REDIS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     multiAZ: {
       enabled: false,

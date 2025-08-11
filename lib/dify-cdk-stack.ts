@@ -68,7 +68,7 @@ export class DifyStackConstruct {
           minSize: config.cluster.managedNodeGroups.app.minSize,
           maxSize: config.cluster.managedNodeGroups.app.maxSize,
           instanceTypes: [config.cluster.managedNodeGroups.app.instanceType],
-          amiType: eks.NodegroupAmiType.AL2_ARM_64,
+          amiType: eks.NodegroupAmiType.AL2023_X86_64_STANDARD,
           nodeGroupSubnets: appNodeSubnets,
           enableSsmPermissions: true,
           tags: {

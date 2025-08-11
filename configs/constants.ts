@@ -3,8 +3,9 @@ export const AWS_EKS_CHART_REPO_URL = process.env.AWS_EKS_CHART_REPO_URL || 'htt
 export const DESTROY_WHEN_REMOVE = process.env.GLOBAL_REMOVE_WHEN_DESTROYED === 'true' || false;
 export const PRODUCT_NAME = 'Dify';
 
-// Generate a 6-character random string consisting of numbers and letters
-export const AWS_RESOURCE_SUFFIX = Math.random().toString(36).slice(2, 8).toUpperCase();
+// Fixed value to keep stack/resource names stable across synth/deploy/destroy.
+// Prefer env var; fallback to a constant that does not change between runs.
+export const AWS_RESOURCE_SUFFIX = (process.env.AWS_RESOURCE_SUFFIX || 'STACK').toUpperCase();
 
 
 /**
@@ -20,7 +21,7 @@ export const EC2_INSTANCE_MAP = {
   '16c64m': 'm7g.4xlarge',
   '32c128m': 'm7g.8xlarge',
 
-  'test': 't4g.small',
+  'test': 't3.xlarge',
 
   '2c4m': 'c7g.large',
   '4c8m': 'c7g.xlarge',
