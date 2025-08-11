@@ -20,6 +20,8 @@ export const EC2_INSTANCE_MAP = {
   '16c64m': 'm7g.4xlarge',
   '32c128m': 'm7g.8xlarge',
 
+  'test': 't4g.small',
+
   '2c4m': 'c7g.large',
   '4c8m': 'c7g.xlarge',
   '8c16m': 'c7g.2xlarge',
@@ -35,6 +37,8 @@ export const EC2_INSTANCE_MAP = {
  * c - vCPUs, m - Memory in GB
  */
 export const REDIS_NODE_MAP = {
+  'test': 'cache.t4g.micro',
+
   '6.38m': 'cache.m6g.large',
   '12.93m': 'cache.m6g.xlarge',
 }
@@ -48,6 +52,8 @@ export const REDIS_NODE_MAP = {
  * c - vCPUs, m - Memory in GB
  */
 export const RDS_INSTANCE_MAP = {
+  'test': 't4g.micro',
+  
   '2c8m': 'm5.large',
   '4c32m': 'r5.xlarge',
 }
@@ -61,6 +67,8 @@ export const RDS_INSTANCE_MAP = {
  * c - vCPUs, m - Memory in GB
  */
 export const OPENSEARCH_INSTANCE_MAP = {
+  'test': 't3.small.search',
+
   '16c64m': 'm7g.4xlarge.search',
   '8c16m': 'c6g.2xlarge.search',
   '2c8m': 'm6g.large.search',

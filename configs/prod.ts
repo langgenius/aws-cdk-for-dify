@@ -1,7 +1,7 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { DESTROY_WHEN_REMOVE, EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { DESTROY_WHEN_REMOVE, EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 export interface ProdStackConfig extends StackConfig {
@@ -14,7 +14,7 @@ export const prodConfig: ProdStackConfig = {
   account: process.env.CDK_PROD_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
   cluster: {
-    version: KubernetesVersion.V1_31,
+    version: KubernetesVersion.V1_33,
     tags: { "marketplace": "dify" },
     // at least 2 ids
     vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
@@ -36,7 +36,7 @@ export const prodConfig: ProdStackConfig = {
   },
 
   postgresSQL: {
-    version: PostgresEngineVersion.VER_14,
+    version: PostgresEngineVersion.VER_17_5,
     instanceType: new InstanceType(RDS_INSTANCE_MAP['4c32m']),
     dbName: 'postgres',
     dbCredentialUsername: 'clusteradmin',
@@ -66,13 +66,13 @@ export const prodConfig: ProdStackConfig = {
   openSearch: {
     enabled: true,
     multiAz: {
-      enabled: false,
+      enabled: true,
       azCount: 2
     },
     subnetIds: process.env.OPENSEARCH_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     capacity: {
       dataNodes: 2,
-      dataNodeInstanceType: 'r6g.large.search',
+      dataNodeInstanceType: OPENSEARCH_INSTANCE_MAP['16c64m'],
       // masterNodes: 2,
       // masterNodeInstanceType: 'r6g.xlarge.search'
     },

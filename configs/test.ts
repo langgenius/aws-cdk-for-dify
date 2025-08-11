@@ -1,7 +1,7 @@
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
 import { PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { DESTROY_WHEN_REMOVE, EC2_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
+import { DESTROY_WHEN_REMOVE, EC2_INSTANCE_MAP, OPENSEARCH_INSTANCE_MAP, RDS_INSTANCE_MAP, REDIS_NODE_MAP } from "./constants";
 import { StackConfig } from "./stackConfig";
 
 
@@ -18,17 +18,17 @@ export const testConfig: TestStackConfig = {
   account: process.env.CDK_TESTING_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
   cluster: {
-    version: KubernetesVersion.V1_31,
+    version: KubernetesVersion.V1_33,
     tags: { "marketplace": "dify" },
     // at least 2 ids
     vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     managedNodeGroups: {
       app: {
         desiredSize: 1,
-        minSize: 1,
+        minSize: 1, 
         maxSize: 1,
-        instanceType: new InstanceType(EC2_INSTANCE_MAP['4c16m']),
-        diskSize: 100,
+        instanceType: new InstanceType(EC2_INSTANCE_MAP['test']),
+        diskSize: 40,
         // at least 2 ids
         workerNodeSubnetIds: process.env.EKS_NODES_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
       }
@@ -40,12 +40,12 @@ export const testConfig: TestStackConfig = {
   },
 
   postgresSQL: {
-    version: PostgresEngineVersion.VER_14,
-    instanceType: new InstanceType(RDS_INSTANCE_MAP['2c8m']),
+    version: PostgresEngineVersion.VER_17_5,
+    instanceType: new InstanceType(RDS_INSTANCE_MAP['test']),
     dbName: 'postgres',
     dbCredentialUsername: 'clusteradmin',
     backupRetention: 0,
-    storageSize: 256,
+    storageSize: 20,
     removeWhenDestroyed: true,
     // at least 2 ids
     subnetIds: process.env.RDS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
@@ -58,8 +58,8 @@ export const testConfig: TestStackConfig = {
   redis: {
     engineVersion: "6.2",
     parameterGroup: "default.redis6.x",
-    nodeType: REDIS_NODE_MAP['6.38m'],
-    readReplicas: 1,
+    nodeType: REDIS_NODE_MAP['test'],
+    readReplicas: 0,
     subnetIds: process.env.REDIS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     multiAZ: {
       enabled: false,
@@ -75,10 +75,10 @@ export const testConfig: TestStackConfig = {
     },
     subnetIds: process.env.OPENSEARCH_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     capacity: {
-      dataNodes: 2,
-      dataNodeInstanceType: 'r6g.large.search',
+      dataNodes: 1,
+      dataNodeInstanceType: OPENSEARCH_INSTANCE_MAP['test'],
     },
-    dataNodeSize: 100
+    dataNodeSize: 10
   }
 
 }
