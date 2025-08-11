@@ -1,6 +1,7 @@
 ### Helm ###
 # Chart dependencies
 **/charts/*.tgz
+package-lock.json
 
 ### Node ###
 # Logs

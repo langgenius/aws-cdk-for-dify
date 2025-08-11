@@ -18,7 +18,7 @@ export const testConfig: TestStackConfig = {
   account: process.env.CDK_TESTING_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT || '',
 
   cluster: {
-    version: KubernetesVersion.V1_33,
+    version: KubernetesVersion.V1_32, //Or we got an error: Resource handler returned message: "AMI Type AL2_ARM_64 is only supported for kubernetes versions 1.32 or earlier 
     tags: { "marketplace": "dify" },
     // at least 2 ids
     vpcSubnetIds: process.env.EKS_CLUSTER_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
@@ -59,7 +59,7 @@ export const testConfig: TestStackConfig = {
     engineVersion: "6.2",
     parameterGroup: "default.redis6.x",
     nodeType: REDIS_NODE_MAP['test'],
-    readReplicas: 0,
+    readReplicas: 1,
     subnetIds: process.env.REDIS_SUBNETS?.trim().split(',').filter(id => id.length > 0) || [],
     multiAZ: {
       enabled: false,
