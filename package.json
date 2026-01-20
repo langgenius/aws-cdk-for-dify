@@ -17,7 +17,7 @@
     "typescript": "~5.3.3"
   },
   "dependencies": {
-    "@aws-quickstart/eks-blueprints": "1.17.2",
+    "@aws-quickstart/eks-blueprints": "^1.17.4",
     "@types/lodash": "^4.14.197",
     "@types/source-map-support": "^0.5.10",
     "aws-cdk-lib": "2.204.0",
