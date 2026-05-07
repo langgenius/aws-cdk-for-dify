@@ -1,4 +1,5 @@
-This project is out-of-dated and is not been maintained. Please visit https://github.com/langgenius/dify-ee-terraform-aws.
+> **Deprecated:** This CDK-based project has been deprecated.  
+> Deployment has moved to Terraform. Please refer to [langgenius/aws-cdk-for-dify](https://github.com/langgenius/aws-cdk-for-dify).
 
 # Dify Enterprise on AWS
 
