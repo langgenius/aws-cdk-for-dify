@@ -1,3 +1,5 @@
+This project is out-of-dated and is not been maintained. Please visit https://github.com/langgenius/dify-ee-terraform-aws.
+
 # Dify Enterprise on AWS
 
 Deploy Dify Enterprise on AWS using CDK.
