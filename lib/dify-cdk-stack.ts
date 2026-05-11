@@ -81,7 +81,6 @@ export class DifyStackConstruct {
               assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
               roleName: `${getConstructPrefix(config)}-EKS-NodeRole`,
               managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"),
                 iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKSWorkerNodePolicy"),
                 iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKS_CNI_Policy"),
                 iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryReadOnly"),
